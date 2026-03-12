@@ -1,0 +1,249 @@
+{
+  "metadata": {
+    "name": "AI Developer Universe",
+    "version": "1.0",
+    "lastUpdated": "2026-03-12"
+  },
+  "developer": {
+    "name": "John Developer",
+    "title": "Senior Software Developer",
+    "bio": "Passionate about building innovative web applications with modern technologies. Specializing in React, 3D graphics, and AI-powered experiences.",
+    "social": {
+      "linkedin": "https://linkedin.com/in/johndeveloper",
+      "github": "https://github.com/johndeveloper",
+      "twitter": "https://twitter.com/johndeveloper",
+      "email": "hello@johndeveloper.com"
+    }
+  },
+  "projects": [
+    {
+      "id": "proj-001",
+      "name": "AI Developer Universe",
+      "description": "Interactive 3D portfolio using Next.js, React, Three.js and AI-powered chat.",
+      "thumbnail": "/images/projects/portfolio.jpg",
+      "links": [
+        {
+          "type": "demo",
+          "url": "https://johndeveloper.com",
+          "icon": "link"
+        },
+        {
+          "type": "code",
+          "url": "https://github.com/johndeveloper/portfolio",
+          "icon": "github"
+        }
+      ],
+      "technologies": ["React", "Next.js", "Three.js", "TypeScript", "TailwindCSS", "OpenAI"],
+      "status": "completed",
+      "date": "2026-03",
+      "category": "frontend",
+      "highlights": [
+        "3D navigation system with React Three Fiber",
+        "AI-powered RAG chat assistant",
+        "Performance optimized for various devices"
+      ],
+      "challenges": [],
+      "outcomes": []
+    },
+    {
+      "id": "proj-002",
+      "name": "Analytics Dashboard",
+      "description": "Real-time analytics dashboard with data visualization and custom reporting.",
+      "links": [
+        {
+          "type": "code",
+          "url": "https://github.com/johndeveloper/analytics",
+          "icon": "github"
+        }
+      ],
+      "technologies": ["React", "D3.js", "Node.js", "PostgreSQL", "Redis"],
+      "status": "completed",
+      "date": "2025-11",
+      "category": "full-stack",
+      "highlights": [],
+      "challenges": [],
+      "outcomes": []
+    },
+    {
+      "id": "proj-003",
+      "name": "AI Code Assistant",
+      "description": "VS Code extension that provides AI-powered code suggestions and documentation.",
+      "links": [
+        {
+          "type": "demo",
+          "url": "https://marketplace.visualstudio.com/items/...",
+          "icon": "link"
+        }
+      ],
+      "technologies": ["TypeScript", "VS Code API", "OpenAI", "Natural Language"],
+      "status": "wip",
+      "date": "2026-01",
+      "category": "tools",
+      "highlighted": [],
+      "challenges": [],
+      "outcomes": []
+    }
+  ],
+  "experience": [
+    {
+      "id": "exp-001",
+      "company": "Tech Innovative Corp",
+      "position": "Senior Software Developer",
+      "location": "Remote",
+      "startDate": "2022-01",
+      "endDate": "present",
+      "responsibilities": [
+        "Led frontend development team of 5 engineers",
+        "Implemented design system across multiple products",
+        "Mentored junior developers and code reviews",
+        "Optimized application performance (40% improvement)"
+      ],
+      "technologies": ["React", "Next.js", "TypeScript", "AWS"],
+      "achievements": [
+        "Reduced page load time by 40%",
+        "Improved team productivity by 25%",
+        "Shipped 15 new features in 2023"
+      ]
+    },
+    {
+      "id": "exp-002",
+      "company": "StartupXYZ",
+      "position": "Full-Stack Developer",
+      "location": "Remote",
+      "startDate": "2019-03",
+      "endDate": "2021-12",
+      "responsibilities": [
+        "Built and maintained React-based dashboard",
+        "Implemented RESTful APIs with Node.js",
+        "Collaborated with product team on feature design",
+        "Participated in architecture planning"
+      ],
+      "technologies": ["React", "Node.js", "MongoDB", "Express"],
+      "achievements": [
+        "Launched MVP in 3 months",
+        "Scaled to 10k users"
+      ]
+    }
+  ],
+  "skills": {
+    "languages": {
+      "TypeScript": 9,
+      "JavaScript": 10,
+      "Python": 7,
+      "Go": 5
+    },
+    "frameworks": {
+      "React": 10,
+      "Next.js": 9,
+      "Three.js": 8,
+      "Node.js": 8
+    },
+    "tools": {
+      "Git": 10,
+      "Docker": 7,
+      "AWS": 6,
+      "VS Code": 10,
+      "Figma": 6
+    }
+  },
+  "aiExperiments": [
+    {
+      "id": "ai-001",
+      "name": "RAG Portfolio Chat",
+      "description": "AI assistant that answers questions about a developer's portfolio using vector embeddings.",
+      "technologies": ["OpenAI GPT-4", "Vector Embeddings", "RAG"],
+      "results": "35% increase in visitor engagement and time on page",
+      "codeUrl": "https://github.com/johndeveloper/ai-portfolio"
+    },
+    {
+      "id": "ai-002",
+      "name": "Code Review Assistant",
+      "description": "ML model that suggests improvements for code quality and security.",
+      "technologies": ["OpenAI GPT-4", "CodeQL", "GitHub Actions"],
+      "results": "Reduced code review time by 50%",
+      "codeUrl": "https://github.com/johndeveloper/code-review-ai"
+    }
+  ],
+  "planets": {
+    "projects": {
+      "name": "Projects",
+      "emoji": "🪐",
+      "color": {
+        "primary": "#8B5CF6",
+        "secondary": "#A78BFA",
+        "glow": "#7C3AED"
+      },
+      "size": {
+        "radius": 2.5
+      },
+      "orbit": {
+        "radius": 15,
+        "speed": 0.05
+      }
+    },
+    "experience": {
+      "name": "Experience",
+      "emoji": "🌍",
+      "color": {
+        "primary": "#3B82F6",
+        "secondary": "#60A5FA",
+        "glow": "#2563EB"
+      },
+      "size": {
+        "radius": 2.8
+      },
+      "orbit": {
+        "radius": 22,
+        "speed": 0.04
+      }
+    },
+    "skills": {
+      "name": "Skills",
+      "emoji": "🌙",
+      "color": {
+        "primary": "#10B981",
+        "secondary": "#34D399",
+        "glow": "#059669"
+      },
+      "size": {
+        "radius": 2.0
+      },
+      "orbit": {
+        "radius": 30,
+        "speed": 0.03
+      }
+    },
+    "ai": {
+      "name": "AI Experiments",
+      "emoji": "☄️",
+      "color": {
+        "primary": "#F97316",
+        "secondary": "#FB923C",
+        "glow": "#EA580C"
+      },
+      "size": {
+        "radius": 2.2
+      },
+      "orbit": {
+        "radius": 38,
+        "speed": 0.035
+      }
+    },
+    "contact": {
+      "name": "Contact",
+      "emoji": "🛰️",
+      "color": {
+        "primary": "#374151",
+        "secondary": "#6B7280",
+        "glow": "#1F2937"
+      },
+      "size": {
+        "radius": 1.8
+      },
+      "orbit": {
+        "radius": 45,
+        "speed": 0.025
+      }
+    }
+  }
+}

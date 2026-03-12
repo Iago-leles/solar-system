@@ -1,0 +1,232 @@
+{
+  "metadata": {
+    "name": "Solar System Explorer",
+    "version": "1.0",
+    "lastUpdated": "2026-03-12"
+  },
+  "solarSystem": {
+    "name": "Solar System",
+    "type": "Planetary System",
+    "star": {
+      "name": "The Sun",
+      "type": "G-type main-sequence star",
+      "age": "4.6 billion years",
+      "diameter": "1,392,700 km",
+      "mass": "1.989 × 10^30 kg",
+      "temperature": "5,778 K (surface)"
+    }
+  },
+  "planets": [
+    {
+      "id": "mercury",
+      "name": "Mercury",
+      "emoji": "☿️",
+      "order": 1,
+      "diameter": "4,879 km",
+      "distance": "57.9 million km",
+      "orbitalPeriod": "88 days",
+      "dayLength": "176 days",
+      "temperature": {
+        "day": "430°C",
+        "night": "-180°C"
+      },
+      "atmosphere": "Minimal (trace amounts of oxygen, sodium, hydrogen)",
+      "moons": 0,
+      "description": "The smallest planet in our solar system and the closest to the Sun. It has no atmosphere to retain heat, resulting in extreme temperature variations.",
+      "facts": [
+        "Mercury is the fastest planet, orbiting the Sun in just 88 days",
+        "It has a highly eccentric orbit, varying from 29 to 43 million miles from the Sun",
+        "Despite being closest to the Sun, Venus is actually hotter due to its thick atmosphere"
+      ],
+      "colors": {
+        "primary": "#A0522D",
+        "secondary": "#8B4513",
+        "glow": "#D2691E"
+      }
+    },
+    {
+      "id": "venus",
+      "name": "Venus",
+      "emoji": "♀️",
+      "order": 2,
+      "diameter": "12,104 km",
+      "distance": "108.2 million km",
+      "orbitalPeriod": "225 days",
+      "dayLength": "243 days",
+      "temperature": {
+        "surface": "462°C"
+      },
+      "atmosphere": "Thick with carbon dioxide (96.5%) and nitrogen (3.5%)",
+      "moons": 0,
+      "description": "Venus is often called Earth's twin due to its similar size. It has a thick, toxic atmosphere that traps heat, making it the hottest planet in our solar system.",
+      "facts": [
+        "Venus rotates in the opposite direction to most planets (retrograde rotation)",
+        "A day on Venus is longer than its year (243 Earth days vs 225)",
+        "Surface pressure is 90 times greater than Earth's"
+      ],
+      "colors": {
+        "primary": "#E6BE8A",
+        "secondary": "#C4A484",
+        "glow": "#FFC266"
+      }
+    },
+    {
+      "id": "earth",
+      "name": "Earth",
+      "emoji": "🌍",
+      "order": 3,
+      "diameter": "12,742 km",
+      "distance": "149.6 million km",
+      "orbitalPeriod": "365.25 days",
+      "dayLength": "24 hours",
+      "temperature": {
+        "average": "15°C",
+        "extreme": "-89°C to 57°C"
+      },
+      "atmosphere": "Nitrogen (78%), Oxygen (21%), Argon (0.9%), CO2 (0.04%)",
+      "moons": 1,
+      "description": "Our home planet and the only known place in the universe with life. It has liquid water, oxygen, and a magnetic field protecting from solar radiation.",
+      "facts": [
+        "Earth is the densest planet in the solar system",
+        "It's the only planet not named after a Greek or Roman god",
+        "71% of Earth's surface is covered by water"
+      ],
+      "colors": {
+        "primary": "#3B82F6",
+        "secondary": "#60A5FA",
+        "glow": "#10B981"
+      }
+    },
+    {
+      "id": "mars",
+      "name": "Mars",
+      "emoji": "♂️",
+      "order": 4,
+      "diameter": "6,779 km",
+      "distance": "227.9 million km",
+      "orbitalPeriod": "687 days",
+      "dayLength": "24.6 hours",
+      "temperature": {
+        "average": "-65°C",
+        "extreme": "-140°C to 20°C"
+      },
+      "atmosphere": "Carbon dioxide (95%), Nitrogen (2.8%), Argon (2%)",
+      "moons": 2,
+      "description": "Known as the Red Planet due to iron oxide on its surface. Mars has the largest volcano and canyon in the solar system - Olympus Mons and Valles Marineris.",
+      "facts": [
+        "Mars has seasons like Earth, but they last twice as long",
+        "Olympus Mons is 3 times taller than Mount Everest - the largest volcano in the solar system",
+        "Mars may have harbored liquid water in the past"
+      ],
+      "colors": {
+        "primary": "#E74C3C",
+        "secondary": "#C0392B",
+        "glow": "#FF6B6B"
+      }
+    },
+    {
+      "id": "jupiter",
+      "name": "Jupiter",
+      "emoji": "♃️",
+      "order": 5,
+      "diameter": "139,820 km",
+      "distance": "778.5 million km",
+      "orbitalPeriod": "11.86 years",
+      "dayLength": "9.93 hours",
+      "temperature": {
+        "cloudTops": "-145°C"
+      },
+      "atmosphere": "Hydrogen (90%), Helium (10%)",
+      "moons": 95,
+      "description": "The largest planet in our solar system. Its famous Great Red Spot is a giant storm that's been raging for at least 350 years. Jupiter has a strong magnetic field.",
+      "facts": [
+        "Jupiter is so large that all other planets could fit inside it",
+        "The Great Red Spot is a storm larger than Earth that has been active for over 350 years",
+        "Jupiter rotates faster than any planet - a day is only about 10 hours"
+      ],
+      "colors": {
+        "primary": "#D2691E",
+        "secondary": "#CD853F",
+        "glow": "#FF8C00"
+      }
+    },
+    {
+      "id": "saturn",
+      "name": "Saturn",
+      "emoji": "🪐",
+      "order": 6,
+      "diameter": "116,460 km",
+      "distance": "1.4 billion km",
+      "orbitalPeriod": "29.45 years",
+      "dayLength": "10.7 hours",
+      "temperature": {
+        "cloudTops": "-140°C"
+      },
+      "atmosphere": "Hydrogen (96%), Helium (3%), Methane (0.4%)",
+      "moons": 146,
+      "description": "Famous for its stunning ring system made of ice and rock. Saturn is less dense than water - if there was a bathtub big enough, Saturn would float!",
+      "facts": [
+        "Saturn's rings extend up to 282,000 km from the planet but are only about 10 meters thick",
+        "Saturn has the most moons of any planet (146 confirmed)",
+        "Winds on Saturn can reach speeds of 1,800 km/h (500 m/s)"
+      ],
+      "colors": {
+        "primary": "#F5DEB3",
+        "secondary": "#DEB887",
+        "glow": "#FFD700"
+      }
+    },
+    {
+      "id": "uranus",
+      "name": "Uranus",
+      "emoji": "⛢",
+      "order": 7,
+      "diameter": "50,724 km",
+      "distance": "2.9 billion km",
+      "orbitalPeriod": "84 years",
+      "dayLength": "17.2 hours",
+      "temperature": {
+        "cloudTops": "-224°C"
+      },
+      "atmosphere": "Hydrogen (83%), Helium (15%), Methane (2%)",
+      "moons": 27,
+      "description": "An ice giant that rotates on its side, rolling around the Sun. Its blue-green color comes from methane in its atmosphere absorbing red light.",
+      "facts": [
+        "Uranus rotates on its side, with its axis tilted 98 degrees",
+        "It's the coldest planetary atmosphere in the solar system at -224°C",
+        "Uranus was the first planet discovered using a telescope (1781)"
+      ],
+      "colors": {
+        "primary": "#87CEEB",
+        "secondary": "#4682B4",
+        "glow": "#ADD8E6"
+      }
+    },
+    {
+      "id": "neptune",
+      "name": "Neptune",
+      "emoji": "♆️",
+      "order": 8,
+      "diameter": "49,244 km",
+      "distance": "4.5 billion km",
+      "orbitalPeriod": "165 years",
+      "dayLength": "16.1 hours",
+      "temperature": {
+        "cloudTops": "-214°C"
+      },
+      "atmosphere": "Hydrogen (80%), Helium (19%), Methane (1.5%)",
+      "moons": 14,
+      "description": "The windiest planet with storms larger than Earth. Neptune was discovered through mathematical predictions before being observed.",
+      "facts": [
+        "Winds on Neptune can reach 2,100 km/h - the fastest in the solar system",
+        "Neptune was discovered purely through mathematical calculations in 1846",
+        "It takes 165 years for Neptune to complete one orbit around the Sun"
+      ],
+      "colors": {
+        "primary": "#4169E1",
+        "secondary": "#1E90FF",
+        "glow": "#6495ED"
+      }
+    }
+  ]
+}
