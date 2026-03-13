@@ -5,9 +5,9 @@ import { useUniverseStore } from '@/store/universeStore'
 import solarSystemData from '@/data/solar-system.json'
 
 export const PlanetContent: React.FC = () => {
-  const { activePlanet, selectPlanet } = useUniverseStore()
+  const { activePlanet, showPlanetModal, setShowPlanetModal, selectPlanet } = useUniverseStore()
   
-  if (!activePlanet) return null
+  if (!activePlanet || !showPlanetModal) return null
   
   const planet = solarSystemData.planets.find((p) => p.id === activePlanet)
   if (!planet) {
@@ -17,7 +17,10 @@ export const PlanetContent: React.FC = () => {
   
   console.log('Showing planet details:', planet.id)
   
-  const handleClose = () => selectPlanet(null)
+  const handleClose = () => {
+    setShowPlanetModal(false)
+    selectPlanet(null)
+  }
   
   return (
     <Modal isOpen={!!activePlanet} onClose={handleClose}>

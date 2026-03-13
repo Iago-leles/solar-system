@@ -1,27 +1,31 @@
-import React from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { OrbitControls } from '@react-three/drei'
-import * as THREE from 'three'
 
 type CameraControlsProps = {
-  target?: THREE.Vector3
-  activePlanet?: string | null
+  trackedObject?: { id: string; type: 'planet' | 'ship' | 'object' } | null
 }
 
 export const UniverseCameraControls: React.FC<CameraControlsProps> = ({
-  target,
-  activePlanet
+  trackedObject
 }) => {
+  const controlsRef = useRef<any>(null)
+  const [isMounted, setIsMounted] = useState(false)
+  
+  useEffect(() => setIsMounted(true), [])
+
   return (
     <OrbitControls
-      enableZoom={!activePlanet}
-      enableRotate={!activePlanet}
-      enablePan={!activePlanet}
-      minDistance={10}
-      maxDistance={100}
+      ref={controlsRef}
+      enableZoom={true}
+      enableRotate={true}
+      enablePan={true}
+      minDistance={30}
+      maxDistance={200}
       minPolarAngle={Math.PI / 4}
       maxPolarAngle={Math.PI * 3 / 4}
-      autoRotate={!activePlanet}
+      autoRotate={!trackedObject}
       autoRotateSpeed={0.5}
+      zoomSpeed={1.5}
     />
   )
 }

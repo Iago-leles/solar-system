@@ -61,6 +61,9 @@ export interface Planet {
     target: [number, number, number]
     distance?: number
   }
+  
+  // Position for camera tracking (updated dynamically)
+  position?: [number, number, number]
 }
 
 export type PlanetContent = {

@@ -74,6 +74,7 @@ const MoonComponent: React.FC<{
     distance: number
     speed: number
     seed: number
+    yOffset?: number
   }
 }> = ({ moon }) => {
   const meshRef = useRef<Mesh>(null)
@@ -108,7 +109,8 @@ const MoonComponent: React.FC<{
       const time = state.clock.getElapsedTime()
       const x = moon.distance * Math.cos(moon.angle + time * moon.speed)
       const z = moon.distance * Math.sin(moon.angle + time * moon.speed)
-      meshRef.current.position.set(x, 0, z)
+      const y = moon.yOffset || 0
+      meshRef.current.position.set(x, y, z)
       meshRef.current.rotation.y += delta * 0.5
     }
   })
@@ -130,15 +132,17 @@ export const Moons: React.FC<{
     const moonData = []
     for (let i = 0; i < moonCount; i++) {
       const angle = (i / moonCount) * Math.PI * 2
-      const distance = planetRadius * (3 + i * 0.8)
+      const distance = planetRadius * (1.6 + i * 0.5)
       const speed = 0.01 + Math.random() * 0.3
+      const yOffset = planetRadius * (Math.random() * 1.6 - 0.8)
       
       moonData.push({
-        radius: planetRadius * (0.25 + i * 0.05),
+        radius: planetRadius * (0.08 + i * 0.02),
         angle,
         distance,
         speed,
-        seed: i
+        seed: i,
+        yOffset
       })
     }
     /* eslint-enable react-hooks/purity */

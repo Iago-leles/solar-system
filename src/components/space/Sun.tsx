@@ -1,5 +1,6 @@
 import React, { useRef, useMemo, useState, useEffect } from 'react'
 import { Mesh } from 'three'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export const Sun: React.FC = () => {
@@ -42,6 +43,13 @@ export const Sun: React.FC = () => {
     return texture
   }, [])
 
+  // Rotate sun on its axis
+  useFrame((state, delta) => {
+    if (sunMeshRef.current) {
+      sunMeshRef.current.rotation.y += delta * 0.2
+    }
+  })
+  
   useEffect(() => {
     const loader = new THREE.TextureLoader()
     loader.load('/textures/sun.jpg',
@@ -56,7 +64,7 @@ export const Sun: React.FC = () => {
   return (
     <group position={[0, 0, 0]}>
       <mesh ref={sunMeshRef}>
-        <sphereGeometry args={[3, 64, 64]} />
+        <sphereGeometry args={[12, 64, 64]} />
         <meshBasicMaterial 
           map={sunTexture}
           toneMapped={false}
@@ -64,13 +72,13 @@ export const Sun: React.FC = () => {
       </mesh>
       
       {/* Multiple soft glow layers for smooth gradient effect */}
-      {[4, 5, 6, 7, 8].map((radius, idx) => (
+      {[14, 16, 18, 20, 22].map((radius, idx) => (
         <mesh key={`glow-${idx}`}>
           <sphereGeometry args={[radius, 32, 32]} />
           <meshBasicMaterial 
             color="#FF6B22"
             transparent 
-            opacity={0.12 - idx * 0.02}
+            opacity={0.1 - idx * 0.015}
             toneMapped={false}
             side={THREE.BackSide}
           />
@@ -78,14 +86,14 @@ export const Sun: React.FC = () => {
       ))}
       
       {/* Gradual soft illumination - multiple spaced lights */}
-      <pointLight position={[0, 0, 0]} intensity={1} color="#FFF8E7" distance={600} decay={3} />
-      <pointLight position={[5, 0, 0]} intensity={0.8} color="#FFE4B5" distance={550} decay={3.2} />
-      <pointLight position={[-5, 0, 0]} intensity={0.8} color="#FFE4B5" distance={550} decay={3.2} />
-      <pointLight position={[0, 5, 0]} intensity={0.6} color="#FFF0D0" distance={500} decay={3.5} />
-      <pointLight position={[0, -5, 0]} intensity={0.6} color="#FFF0D0" distance={500} decay={3.5} />
+      <pointLight position={[0, 0, 0]} intensity={2} color="#FFF8E7" distance={900} decay={3} />
+      <pointLight position={[5, 0, 0]} intensity={1.5} color="#FFE4B5" distance={850} decay={3.2} />
+      <pointLight position={[-5, 0, 0]} intensity={1.5} color="#FFE4B5" distance={850} decay={3.2} />
+      <pointLight position={[0, 5, 0]} intensity={1.2} color="#FFF0D0" distance={750} decay={3.5} />
+      <pointLight position={[0, -5, 0]} intensity={1.2} color="#FFF0D0" distance={750} decay={3.5} />
       
       {/* Wide ambient for soft fill */}
-      <ambientLight intensity={0.25} color="#505070" />
+      <ambientLight intensity={0.3} color="#505070" />
     </group>
   )
 }

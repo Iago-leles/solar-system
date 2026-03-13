@@ -9,18 +9,18 @@ const modelPath = '/3d_models/fighter.glb'
 
 useGLTF.preload(modelPath)
 
+const laserStartOffset: [number, number, number] = [0, 0.1, -2]
+
 interface SpaceFighterProps {
   id: number
   falconData: React.RefObject<{ 
     x: number; y: number; z: number; 
     velocityX: number; velocityY: number; velocityZ: number;
   }>
+  onPositionUpdate?: (pos: { x: number; y: number; z: number }) => void
 }
 
-// Start offset relative to group center (nose area)
-const laserStartOffset: [number, number, number] = [0, 0.1, -2]
-
-export const SpaceFighter: React.FC<SpaceFighterProps> = ({ id, falconData }) => {
+export const SpaceFighter: React.FC<SpaceFighterProps> = ({ id, falconData, onPositionUpdate }) => {
   const { scene } = useGLTF(modelPath)
   const groupRef = React.useRef<Group>(null)
   const localSceneRef = useRef(scene.clone())
@@ -58,6 +58,15 @@ export const SpaceFighter: React.FC<SpaceFighterProps> = ({ id, falconData }) =>
       groupRef.current.position.x += (targetX - groupRef.current.position.x) * pursuitSpeed
       groupRef.current.position.y += (targetY - groupRef.current.position.y) * pursuitSpeed
       groupRef.current.position.z += (targetZ - groupRef.current.position.z) * pursuitSpeed
+      
+      // Report position to parent
+      if (onPositionUpdate) {
+        onPositionUpdate({ 
+          x: groupRef.current.position.x, 
+          y: groupRef.current.position.y, 
+          z: groupRef.current.position.z 
+        })
+      }
       
       const dx = targetX - groupRef.current.position.x
       const dy = targetY - groupRef.current.position.y

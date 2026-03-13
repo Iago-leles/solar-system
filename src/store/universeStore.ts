@@ -10,14 +10,17 @@ interface UniverseStore extends UniverseState {
   planets: Planet[]
   setPlanets: (planets: Planet[]) => void
   getCameraPosition: (planetId?: string) => CameraPosition | null
+  showPlanetModal: boolean
+  setShowPlanetModal: (show: boolean) => void
 }
 
-export const useUniverseStore = create<UniverseStore>((set, get) => ({
+export const useUniverseStore = create<UniverseStore>((set) => ({
   activePlanet: null,
   hoveredPlanet: null,
   cameraMode: 'overview',
   isTransitioning: false,
   planets: [],
+  showPlanetModal: false,
   
   selectPlanet: (planetId) => {
     set({ 
@@ -42,20 +45,11 @@ export const useUniverseStore = create<UniverseStore>((set, get) => ({
     set({ planets })
   },
   
+  setShowPlanetModal: (show) => {
+    set({ showPlanetModal: show })
+  },
+  
   getCameraPosition: (planetId) => {
-    const { activePlanet, planets } = get()
-    const targetPlanetID = planetId || activePlanet
-    
-    if (!targetPlanetID) {
-      return {
-        position: [40, 40, 40] as [number, number, number],
-        target: [0, 0, 0] as [number, number, number]
-      }
-    }
-    
-    const planet = planets.find((p) => p.id === targetPlanetID)
-    if (!planet?.camera) return null
-    
-    return planet.camera
+    return null
   }
 }))

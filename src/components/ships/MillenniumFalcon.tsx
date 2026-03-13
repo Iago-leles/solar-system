@@ -35,7 +35,7 @@ export const MillenniumFalcon: React.FC<{
     
     if (groupRef.current) {
       const time = lastTime.current
-      const cycleRadius = 30
+      const cycleRadius = 60
       const cycleTime = time * 0.15
       
       const centerX = position[0]

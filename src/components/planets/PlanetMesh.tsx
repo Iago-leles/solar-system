@@ -181,7 +181,7 @@ export const PlanetMesh: React.FC<PlanetMeshProps> = ({
           {material}
           
           {(isHovered || isSelected) && (
-            <pointLight color={planet.color.glow} intensity={1} distance={15} />
+            <pointLight color={planet.color.glow} intensity={1} distance={15} castShadow={false} />
           )}
         </mesh>
         
