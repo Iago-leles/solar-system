@@ -179,7 +179,3 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - 3D Models from [Sketchfab](https://sketchfab.com/) and creative commons sources
 - Planet textures from NASA and space agencies
 - Design inspired by space exploration games
-
----
-
-Made with ❤️ using modern web technologies
