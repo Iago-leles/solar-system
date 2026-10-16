@@ -26,6 +26,12 @@ export const Scene: React.FC<SceneProps> = ({ children, className }) => {
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.2
         }}
+        onCreated={(state) => {
+          // ?debug exposes the R3F state so renderer.info can be read from the console
+          if (new URLSearchParams(window.location.search).has('debug')) {
+            ;(window as unknown as { __r3f: typeof state }).__r3f = state
+          }
+        }}
       >
         {children}
       </Canvas>

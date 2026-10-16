@@ -10,22 +10,21 @@ import { Rings, Moons } from './Rings'
 
 interface PlanetMeshProps {
   planet: Planet
-  isHovered: boolean
   onHover: (hovered: boolean) => void
   onClick: () => void
 }
 
 export const PlanetMesh: React.FC<PlanetMeshProps> = ({
   planet,
-  isHovered,
   onHover,
   onClick
 }) => {
   const meshRef = useRef<Mesh>(null)
   const groupRef = useRef<Group>(null)
-  const { activePlanet, isTransitioning } = useUniverseStore()
-  
-  const isSelected = activePlanet === planet.id
+  // Boolean selectors: this planet only re-renders when its own hover/selection changes
+  const isHovered = useUniverseStore((s) => s.hoveredPlanet === planet.id)
+  const isSelected = useUniverseStore((s) => s.activePlanet === planet.id)
+  const isTransitioning = useUniverseStore((s) => s.isTransitioning)
   
   // Get orbit configuration from constants
   const orbitRadius = useMemo(() => {
@@ -179,10 +178,6 @@ export const PlanetMesh: React.FC<PlanetMeshProps> = ({
         >
           <sphereGeometry args={[planet.size.radius, 64, 64]} />
           {material}
-          
-          {(isHovered || isSelected) && (
-            <pointLight color={planet.color.glow} intensity={1} distance={15} castShadow={false} />
-          )}
         </mesh>
         
         {/* Saturn's Rings */}

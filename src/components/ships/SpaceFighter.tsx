@@ -1,15 +1,17 @@
-/* eslint-disable react-hooks/refs */
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import type { Group } from 'three'
 import * as THREE from 'three'
+import type { Group } from 'three'
+import { Lasers, getNosePoint, type LasersHandle } from './Lasers'
 
 const modelPath = '/3d_models/fighter.glb'
 
 useGLTF.preload(modelPath)
 
-const laserStartOffset: [number, number, number] = [0, 0.1, -2]
+const MODEL_SCALE = 0.15
+// The heading below adds PI, so the model's nose points along local -Z
+const LOCAL_FORWARD = new THREE.Vector3(0, 0, -1)
 
 interface SpaceFighterProps {
   id: number
@@ -23,22 +25,18 @@ interface SpaceFighterProps {
 export const SpaceFighter: React.FC<SpaceFighterProps> = ({ id, falconData, onPositionUpdate }) => {
   const { scene } = useGLTF(modelPath)
   const groupRef = React.useRef<Group>(null)
-  const localSceneRef = useRef(scene.clone())
-  const [lasers, setLasers] = useState<{ offset: [number, number, number]; birthTime: number; direction: [number, number, number] }[]>([])
-  const lastAttackTime = useRef(0)
-  const currentTimeRef = useRef(0)
+  // Each fighter needs its own copy of the model. Clone once, not on every render
+  const localScene = useMemo(() => scene.clone(), [scene])
   
-  useEffect(() => {
-    localSceneRef.current = scene.clone()
-  }, [scene])
-  
-  useFrame((state) => {
-    currentTimeRef.current = state.clock.getElapsedTime()
-  })
+  const lasersRef = useRef<LasersHandle>(null)
+  const nextShot = useRef(1 + id * 0.3)
+  const nose = useMemo(() => getNosePoint(localScene, MODEL_SCALE, 'z', -1), [localScene])
+  const shotOrigin = useMemo(() => new THREE.Vector3(), [])
+  const shotDirection = useMemo(() => new THREE.Vector3(), [])
+  const worldQuaternion = useMemo(() => new THREE.Quaternion(), [])
   
   useFrame((state) => {
     if (groupRef.current && falconData.current) {
-      const time = state.clock.getElapsedTime()
       const target = falconData.current
       
       const predictionFrames = 10
@@ -76,75 +74,27 @@ export const SpaceFighter: React.FC<SpaceFighterProps> = ({ id, falconData, onPo
       groupRef.current.rotation.x = Math.atan2(dy, Math.sqrt(dx * dx + dz * dz))
       groupRef.current.rotation.z = 0
       
-      const distToTarget = Math.sqrt(dx * dx + dy * dy + dz * dz)
-      const fireInterval = 0.6
-      
-      // Fire lasers with current group rotation as dynamic direction
-      if (time - lastAttackTime.current > fireInterval && Math.random() > 0.4 && distToTarget < 40 && groupRef.current) {
-        const localDir = new THREE.Vector3(0, 0, 1)
-        localDir.applyEuler(groupRef.current.rotation)
-        const direction = localDir.clone().normalize()
-        
-        setLasers(prev => [...prev, {
-          offset: laserStartOffset,
-          direction: [direction.x, direction.y, direction.z] as [number, number, number],
-          birthTime: state.clock.getElapsedTime()
-        }].slice(-2))
-        
-        lastAttackTime.current = time
+      // Light shots from the nose, along the direction the fighter is facing
+      const time = state.clock.getElapsedTime()
+      if (time > nextShot.current) {
+        const group = groupRef.current
+        group.updateMatrixWorld()
+        shotOrigin.copy(nose)
+        group.localToWorld(shotOrigin)
+        shotDirection.copy(LOCAL_FORWARD).applyQuaternion(group.getWorldQuaternion(worldQuaternion)).normalize()
+        lasersRef.current?.fire(shotOrigin, shotDirection)
+        nextShot.current = time + 0.6 + Math.random() * 0.8
       }
-    }
-  })
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-      setLasers(prev => prev.filter(laser => {
-        const age = state.clock.getElapsedTime() - laser.birthTime
-        return age >= 0 && age < 1
-      }))
     }
   })
   
   return (
     <group>
       <group ref={groupRef} position={[-60 - id * 18, 25 + id * 8, -70 - id * 18]}>
-        <primitive object={localSceneRef.current} scale={0.15} />
-        <pointLight color="#ff4444" intensity={3} distance={12} />
+        <primitive object={localScene} scale={MODEL_SCALE} />
         <ambientLight intensity={0.5} />
-        
-        {/* Lasers are inside the group, with relative positions */}
-        {/* {lasers.map((laser, idx) => {
-          const age = currentTimeRef.current - laser.birthTime
-          const dirVec = new THREE.Vector3(laser.direction[0], laser.direction[1], laser.direction[2])
-          const offset = new THREE.Vector3(laser.offset[0], laser.offset[1], laser.offset[2])
-          
-          // Travel from start offset based on age and direction
-          const speed = 40
-          const travelDist = age * speed
-          const laserPos = offset.add(dirVec.clone().multiplyScalar(travelDist))
-          
-          // Calculate dynamic rotations based on current group rotation
-          const localDir = new THREE.Vector3(0, 0, 1).applyEuler(groupRef.current!.rotation)
-          const dynRot = [-Math.PI / 2, 0, 0] // Base rotation for cylinders
-          
-          // Fixed rotation offset for nose alignment
-          const rotOffset = [-0.2, 0.05, 0]
-          
-          if (age < 0 || age > 1) return null
-          
-          return (
-            <mesh 
-              key={idx} 
-              position={[laserPos.x, laserPos.y, laserPos.z]} 
-              rotation={[dynRot[0] + rotOffset[0], dynRot[1] + rotOffset[1], dynRot[2] + rotOffset[2]]}
-            >
-              <cylinderGeometry args={[0.18, 0.18, 6]} />
-              <meshBasicMaterial color="#ff0000" toneMapped={false} />
-              <pointLight color="#ff0000" intensity={10} distance={15} />
-            </mesh>
-          )
-        })} */}
       </group>
+      <Lasers ref={lasersRef} color="#39ff6a" />
     </group>
   )
 }

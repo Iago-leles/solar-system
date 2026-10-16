@@ -24,3 +24,60 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Planet details sheet */
+.planet-sheet {
+  animation: planet-sheet-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.planet-globe {
+  background-size: 100% 100%, 100% 100%, 200% 100%;
+  background-repeat: no-repeat, no-repeat, repeat-x;
+  animation: planet-globe-spin 48s linear infinite;
+}
+
+@keyframes planet-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (min-width: 768px) {
+  @keyframes planet-sheet-in {
+    from {
+      opacity: 0;
+      transform: translateX(32px);
+    }
+  }
+}
+
+/* Slides the texture sideways: reads as the planet turning on its axis */
+@keyframes planet-globe-spin {
+  from {
+    background-position: 0 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 0 0, 0 0, -200% 0;
+  }
+}
+
+/* Hover label and selection bar */
+.overlay-pop {
+  animation: overlay-pop-in 180ms ease-out;
+}
+
+@keyframes overlay-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planet-sheet,
+  .overlay-pop,
+  .planet-globe {
+    animation: none;
+  }
+}

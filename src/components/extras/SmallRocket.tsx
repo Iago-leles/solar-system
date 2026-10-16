@@ -56,9 +56,6 @@ export const SmallRocket: React.FC = () => {
         <boxGeometry args={[0.6, 0.1, 0.05]} />
         <meshStandardMaterial color="#A0522D" />
       </mesh>
-      
-      {/* Engine glow */}
-      <pointLight position={[0, -1, 0]} color="#FF4500" intensity={1} distance={5} />
     </group>
   )
 }

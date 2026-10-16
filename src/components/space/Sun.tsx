@@ -85,12 +85,8 @@ export const Sun: React.FC = () => {
         </mesh>
       ))}
       
-      {/* Gradual soft illumination - multiple spaced lights */}
+      {/* Every point light adds cost to every lit material, so the sun keeps just one */}
       <pointLight position={[0, 0, 0]} intensity={2} color="#FFF8E7" distance={900} decay={3} />
-      <pointLight position={[5, 0, 0]} intensity={1.5} color="#FFE4B5" distance={850} decay={3.2} />
-      <pointLight position={[-5, 0, 0]} intensity={1.5} color="#FFE4B5" distance={850} decay={3.2} />
-      <pointLight position={[0, 5, 0]} intensity={1.2} color="#FFF0D0" distance={750} decay={3.5} />
-      <pointLight position={[0, -5, 0]} intensity={1.2} color="#FFF0D0" distance={750} decay={3.5} />
       
       {/* Wide ambient for soft fill */}
       <ambientLight intensity={0.3} color="#505070" />
