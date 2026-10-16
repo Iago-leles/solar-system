@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import type { Mesh, Group } from 'three'
+import { Object3D } from 'three'
+import type { Mesh, Group, InstancedMesh } from 'three'
 
 type AsteroidData = {
   position: [number, number, number]
@@ -14,10 +15,15 @@ function createRandom(min = 0, max = 1) {
   return min + Math.random() * (max - min)
 }
 
+const ASTEROID_COUNT = 200
+
 export const AsteroidField: React.FC = () => {
+  const meshRef = useRef<InstancedMesh>(null)
+  const dummy = useMemo(() => new Object3D(), [])
+  
   const asteroids = useMemo((): AsteroidData[] => {
     const asteroidData: AsteroidData[] = []
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < ASTEROID_COUNT; i++) {
       asteroidData.push({
         position: [
           createRandom(-100, 100),
@@ -33,33 +39,31 @@ export const AsteroidField: React.FC = () => {
     return asteroidData
   }, [])
   
-  return (
-    <>
-      {asteroids.map((asteroid, idx) => (
-        <Asteroid key={`asteroid-${idx}`} asteroid={asteroid} />
-      ))}
-    </>
-  )
-}
-
-const Asteroid: React.FC<{ asteroid: AsteroidData }> = ({ asteroid }) => {
-  const meshRef = useRef<Mesh>(null)
-  
+  // One InstancedMesh = one draw call and one useFrame for the whole field
   useFrame((state) => {
-    if (meshRef.current) {
-      const time = state.clock.getElapsedTime() * asteroid.speed
+    const mesh = meshRef.current
+    if (!mesh) return
+    const elapsed = state.clock.getElapsedTime()
+    
+    for (let i = 0; i < asteroids.length; i++) {
+      const asteroid = asteroids[i]
+      const time = elapsed * asteroid.speed
       
-      meshRef.current.position.x = Math.cos(time) * asteroid.radius
-      meshRef.current.position.z = Math.sin(time) * asteroid.radius
-      meshRef.current.rotation.y += asteroid.rotationSpeed
+      dummy.position.set(Math.cos(time) * asteroid.radius, 0, Math.sin(time) * asteroid.radius)
+      // rotationSpeed was tuned per frame at 60fps; scale by time so it no longer depends on frame rate
+      dummy.rotation.set(0, asteroid.rotationSpeed * 60 * elapsed, 0)
+      dummy.scale.setScalar(asteroid.size)
+      dummy.updateMatrix()
+      mesh.setMatrixAt(i, dummy.matrix)
     }
+    mesh.instanceMatrix.needsUpdate = true
   })
   
   return (
-    <mesh ref={meshRef}>
-      <dodecahedronGeometry args={[asteroid.size, 0]} />
+    <instancedMesh ref={meshRef} args={[undefined, undefined, ASTEROID_COUNT]} frustumCulled={false}>
+      <dodecahedronGeometry args={[1, 0]} />
       <meshStandardMaterial color="#3a4050" roughness={0.8} metalness={0.2} />
-    </mesh>
+    </instancedMesh>
   )
 }
 
@@ -142,7 +146,6 @@ export const Comet: React.FC = () => {
         <meshStandardMaterial color="#E3F2FD" roughness={0.15} emissive="#E3F2FD" emissiveIntensity={3} />
       </mesh>
       
-      <pointLight color="#87CEEB" intensity={2} distance={8} />
     </group>
   )
 }
@@ -163,7 +166,6 @@ export const BlinkingPulsar: React.FC = () => {
     <mesh position={[60, 50, -80]} ref={meshRef}>
       <sphereGeometry args={[1]} />
       <meshStandardMaterial color="#1E90FF" emissive="#1E90FF" emissiveIntensity={1} />
-      <pointLight color="#1E90FF" intensity={2} distance={20} />
     </mesh>
   )
 }

@@ -1,7 +1,9 @@
 import React from 'react'
 import { useGLTF } from '@react-three/drei'
 import type { Group } from 'three'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, type ThreeEvent } from '@react-three/fiber'
+import { useUniverseStore } from '@/store/universeStore'
+import { DEATH_STAR_ID } from '@/data/space-objects'
 
 const modelPath = '/3d_models/death_star.glb'
 
@@ -23,8 +25,30 @@ export const DeathStar: React.FC<DeathStarProps> = ({ position = [0, 0, -150], s
     }
   })
   
+  // Same hover/select flow as the planets, so the Death Star opens its own details sheet
+  const handlePointerOver = (e: ThreeEvent<PointerEvent>) => {
+    e.stopPropagation()
+    useUniverseStore.getState().hoverPlanet(DEATH_STAR_ID)
+  }
+  const handlePointerOut = (e: ThreeEvent<PointerEvent>) => {
+    e.stopPropagation()
+    if (useUniverseStore.getState().hoveredPlanet === DEATH_STAR_ID) {
+      useUniverseStore.getState().hoverPlanet(null)
+    }
+  }
+  const handleClick = (e: ThreeEvent<MouseEvent>) => {
+    e.stopPropagation()
+    useUniverseStore.getState().selectPlanet(DEATH_STAR_ID)
+  }
+  
   return (
-    <group ref={groupRef} position={position}>
+    <group
+      ref={groupRef}
+      position={position}
+      onPointerOver={handlePointerOver}
+      onPointerOut={handlePointerOut}
+      onClick={handleClick}
+    >
       {/* Intense white lights for clear visibility */}
       <pointLight color="#FFFFFF" intensity={500} distance={200} decay={2} position={[0, 10, 0]} />
       <pointLight color="#FFFFFF" intensity={400} distance={200} decay={2} position={[0, -10, 0]} />

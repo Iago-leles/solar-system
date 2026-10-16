@@ -80,7 +80,6 @@ export const ShootingStar: React.FC = () => {
       <mesh>
         <sphereGeometry args={[0.35, 16, 16]} />
         <meshStandardMaterial color="#FFD700" roughness={0.2} emissive="#FFD700" emissiveIntensity={4} />
-        <pointLight color="#FFD700" intensity={2} distance={6} />
       </mesh>
     </group>
   )

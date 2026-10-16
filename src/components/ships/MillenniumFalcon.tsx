@@ -1,37 +1,42 @@
  
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import type { Group } from 'three'
 import * as THREE from 'three'
+import type { Group } from 'three'
+import { Lasers, getNosePoint, type LasersHandle } from './Lasers'
 
 const modelPath = '/3d_models/millennium_falcon.glb'
 
 useGLTF.preload(modelPath)
 
+const MODEL_SCALE = 0.5
+// The heading below adds PI/2, so the model's nose points along local -X
+const LOCAL_FORWARD = new THREE.Vector3(-1, 0, 0)
+
 export const MillenniumFalcon: React.FC<{ 
   position?: [number, number, number]; 
   rotation?: number;
   onPositionUpdate?: (pos: { x: number; y: number; z: number; velocityX: number; velocityY: number; velocityZ: number }) => void;
-  fightersData?: React.RefObject<{ x: number; y: number; z: number }[]>;
 }> = 
-  ({ position = [-20, 0, -30], rotation = 0, onPositionUpdate, fightersData }) => {
+  ({ position = [-20, 0, -30], rotation = 0, onPositionUpdate }) => {
   const { scene } = useGLTF(modelPath)
   const groupRef = React.useRef<Group>(null)
-  const [lasers, setLasers] = useState<{ offset: [number, number, number]; birthTime: number; direction: [number, number, number] }[]>([])
   
   const baseY = position[1]
   const lastPos = useRef({ x: 0, y: 0, z: 0 })
   const velocityRef = useRef({ x: 0, y: 0, z: 0 })
   const lastTime = useRef(0)
-  const currentTimeRef = useRef(0)
   
-  // Start offset relative to group center (nose area, like your example)
-  const laserStartOffset: [number, number, number] = [0, 0.1, -3]
+  const lasersRef = useRef<LasersHandle>(null)
+  const nextShot = useRef(1)
+  const nose = useMemo(() => getNosePoint(scene, MODEL_SCALE, 'x', -1), [scene])
+  const shotOrigin = useMemo(() => new THREE.Vector3(), [])
+  const shotDirection = useMemo(() => new THREE.Vector3(), [])
+  const worldQuaternion = useMemo(() => new THREE.Quaternion(), [])
   
   useFrame((state) => {
     lastTime.current = state.clock.getElapsedTime()
-    currentTimeRef.current = lastTime.current
     
     if (groupRef.current) {
       const time = lastTime.current
@@ -79,86 +84,25 @@ export const MillenniumFalcon: React.FC<{
         })
       }
       
-      // Fire lasers aiming at nearest fighter
-      if (Math.random() > 0.3 && groupRef.current && fightersData?.current) {
-        const myPos = groupRef.current.position
-        let nearestDist = Infinity
-        let targetDir = new THREE.Vector3(0, 0, 1)
-        
-        for (const fighter of fightersData.current) {
-          const dx = fighter.x - myPos.x
-          const dy = fighter.y - myPos.y
-          const dz = fighter.z - myPos.z
-          const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
-          
-          if (dist < nearestDist) {
-            nearestDist = dist
-            targetDir = new THREE.Vector3(dx, dy, dz).normalize()
-          }
-        }
-        
-        const direction = targetDir
-        const birthTime = lastTime.current + 0.001
-        
-        setLasers(prev => [...prev, {
-          offset: laserStartOffset,
-          direction: [direction.x, direction.y, direction.z] as [number, number, number],
-          birthTime
-        }].slice(-3))
+      // Light shots from the nose, along the direction the ship is facing
+      if (time > nextShot.current) {
+        const group = groupRef.current
+        group.updateMatrixWorld()
+        shotOrigin.copy(nose)
+        group.localToWorld(shotOrigin)
+        shotDirection.copy(LOCAL_FORWARD).applyQuaternion(group.getWorldQuaternion(worldQuaternion)).normalize()
+        lasersRef.current?.fire(shotOrigin, shotDirection)
+        nextShot.current = time + 0.5 + Math.random() * 0.9
       }
-    }
-  })
-  
-  useFrame((state) => {
-    currentTimeRef.current = state.clock.getElapsedTime()
-    
-    if (groupRef.current) {
-      setLasers(prev => prev.filter(laser => {
-        const age = currentTimeRef.current - laser.birthTime
-        return age >= 0 && age < 1
-      }))
     }
   })
   
   return (
     <group>
       <group ref={groupRef} position={position} rotation={[0, rotation, 0]}>
-        <primitive object={scene} scale={0.5} />
-        <pointLight color="#ffffff" intensity={2} distance={15} />
-        
-        {/* Lasers are inside the group now, with relative positions */}
-        {/* {lasers.map((laser, idx) => {
-          const age = currentTimeRef.current - laser.birthTime
-          const dirVec = new THREE.Vector3(laser.direction[0], laser.direction[1], laser.direction[2])
-          const offset = new THREE.Vector3(laser.offset[0], laser.offset[1], laser.offset[2])
-          
-          // Travel from start offset based on age and direction
-          const speed = 40
-          const travelDist = age * speed
-          const laserPos = offset.add(dirVec.clone().multiplyScalar(travelDist))
-          
-          // Calculate dynamic rotations based on current group rotation
-          const localDir = new THREE.Vector3(0, 0, 1).applyEuler(groupRef.current!.rotation)
-          const dynRot = [-Math.PI / 2, 0, 0] // Base rotation for cylinders
-          
-          // Your fixed rotation offset: [-Math.PI / 3.5, 0.4, -10]
-          const rotOffset = [-0.3, 0, 0]
-          
-          if (age < 0 || age > 1) return null
-          
-          return (
-            <mesh 
-              key={idx} 
-              position={[laserPos.x, laserPos.y, laserPos.z]} 
-              rotation={[dynRot[0] + rotOffset[0], dynRot[1] + rotOffset[1], dynRot[2] + rotOffset[2]]}
-            >
-              <cylinderGeometry args={[0.15, 0.15, 8]} />
-              <meshBasicMaterial color="#00ff00" toneMapped={false} />
-              <pointLight color="#00ff00" intensity={8} distance={12} />
-            </mesh>
-          )
-        })} */}
+        <primitive object={scene} scale={MODEL_SCALE} />
       </group>
+      <Lasers ref={lasersRef} color="#ff3b3b" />
     </group>
   )
 }

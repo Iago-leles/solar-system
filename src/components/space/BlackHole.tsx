@@ -24,7 +24,6 @@ export const BlackHole: React.FC<BlackHoleProps> = ({ position = [30, -30, -250]
   return (
     <group ref={groupRef} position={position}>
       <primitive object={scene} scale={0.03} />
-      <pointLight color="#FF4500" intensity={2} distance={100} />
     </group>
   )
 }

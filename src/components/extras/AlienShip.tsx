@@ -34,7 +34,6 @@ export const AlienShip: React.FC = () => {
   return (
     <group ref={shipRef}>
       <primitive object={scene} scale={4} />
-      <pointLight color="#f10909ff" intensity={25} distance={100} />
       <ambientLight intensity={0.3} />
     </group>
   )
